@@ -15,6 +15,41 @@ async function 글꼴을_문자로(파일명: string): Promise<string> {
 }
 
 /**
+ * 글꼴 조각 목록.
+ *
+ * **`범위`(unicode-range)를 반드시 붙여야 한다.**
+ * 같은 이름·같은 굵기로 여러 번 선언하면서 범위를 안 주면
+ * 브라우저가 **마지막 것 하나만 쓰고 나머지를 무시한다.**
+ * 그러면 조각을 아무리 넣어도 소용이 없다.
+ *
+ * 아래에서 먼저 오는 것이 넓은 범위, 뒤에 오는 것이 좁은 범위다.
+ * 같은 글자를 둘 다 담고 있으면 **뒤에 온 것이 이긴다.**
+ */
+const 조각들 = [
+  // 1. 한글 전체 — 범위를 주지 않아 모든 글자를 받는다 (바탕이 된다)
+  { 파일: 'serif-kr.woff2', 굵기: 400, 범위: null },
+  { 파일: 'serif-kr-bold.woff2', 굵기: 700, 범위: null },
+
+  // 2. 라틴 글자 — 영문 수료증과 학번·숫자에 쓴다
+  {
+    파일: 'serif-latin.woff2',
+    굵기: 400,
+    범위: 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD',
+  },
+  {
+    파일: 'serif-latin-bold.woff2',
+    굵기: 700,
+    범위: 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD',
+  },
+
+  // 3. 「 」 같은 한중일 문장부호 — 1번 한글 조각에 들어 있지 않다.
+  //    내 컴퓨터에서는 크롬이 시스템 글꼴로 대신 그려주지만,
+  //    서버(Vercel)에는 시스템 글꼴이 없어 네모(□)로 나온다.
+  { 파일: 'serif-punct.woff2', 굵기: 400, 범위: 'U+3000-303F' },
+  { 파일: 'serif-punct-bold.woff2', 굵기: 700, 범위: 'U+3000-303F' },
+] as const;
+
+/**
  * 수료증용 @font-face CSS를 만든다.
  *
  * 글꼴 파일을 글자(base64)로 바꿔 CSS 안에 직접 넣는다.
@@ -23,33 +58,21 @@ async function 글꼴을_문자로(파일명: string): Promise<string> {
 export async function 수료증_글꼴_CSS(): Promise<string> {
   if (기억해둔_CSS) return 기억해둔_CSS;
 
-  const [본문, 굵게, 라틴, 라틴굵게, 문장부호, 문장부호굵게] = await Promise.all([
-    글꼴을_문자로('serif-kr.woff2'),
-    글꼴을_문자로('serif-kr-bold.woff2'),
-    글꼴을_문자로('serif-latin.woff2'),
-    글꼴을_문자로('serif-latin-bold.woff2'),
-    // 「 」 같은 한중일 문장부호. 위의 한글 조각에는 들어 있지 않다.
-    // 내 컴퓨터에서는 크롬이 시스템 글꼴로 대신 그려주지만,
-    // 서버(Vercel)에는 시스템 글꼴이 없어 네모(□)로 나온다.
-    글꼴을_문자로('serif-punct.woff2'),
-    글꼴을_문자로('serif-punct-bold.woff2'),
-  ]);
+  const 읽은것 = await Promise.all(조각들.map((조각) => 글꼴을_문자로(조각.파일)));
 
-  const face = (base64: string, weight: number) => `
+  기억해둔_CSS = 조각들
+    .map((조각, i) => {
+      const 범위줄 = 조각.범위 ? `\n  unicode-range: ${조각.범위};` : '';
+      return `
 @font-face {
   font-family: 'Noto Serif KR';
   font-style: normal;
-  font-weight: ${weight};
+  font-weight: ${조각.굵기};
   font-display: block;
-  src: url(data:font/woff2;base64,${base64}) format('woff2');
+  src: url(data:font/woff2;base64,${읽은것[i]}) format('woff2');${범위줄}
 }`;
-
-  기억해둔_CSS = [
-    face(라틴, 400),
-    face(라틴굵게, 700),
-    face(본문, 400),
-    face(굵게, 700),
-  ].join('\n');
+    })
+    .join('\n');
 
   return 기억해둔_CSS;
 }
