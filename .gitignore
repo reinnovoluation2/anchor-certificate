@@ -1,0 +1,59 @@
+# ── 이 프로젝트 규칙 (CLAUDE.md) ──────────────────────
+
+# 비밀 값 (절대 커밋 금지)
+.env
+.env*
+# 값이 비어 있는 예시 파일은 커밋해도 됨 (CLAUDE.md 5번)
+!.env.example
+
+# 삭제 대기 파일 (CLAUDE.md 8번 규칙)
+trash-can/
+
+# ── 아래는 Next.js 기본 설정 ──────────────────────────
+
+# 의존성 (용량이 크고 재설치 가능)
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# 테스트
+/coverage
+
+# next.js 빌드 결과물
+/.next/
+/out/
+
+# 배포 빌드
+/build
+
+# 기타
+.DS_Store
+*.pem
+
+# 디버그 기록
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# 직인 등 서버만 읽는 파일 (웹으로 내려받을 수 없어야 함)
+private/*
+!private/README.md
+
+# 저장된 명단과 설정 (개인정보가 들어갈 수 있음, 절대 커밋 금지)
+.data/
+
+# bkit 플러그인 작업 기록 (내 컴퓨터에서만 쓰는 것)
+.bkit/
