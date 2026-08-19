@@ -1,0 +1,25 @@
+# Vercel에 올리지 않을 것.
+#
+# .gitignore 와 따로 필요하다. Vercel CLI 는 로컬 폴더를 그대로 올리기 때문에,
+# GitHub에 안 올라간 파일도 배포에는 딸려 들어갈 수 있다.
+
+# 저장된 명단과 설정 — 개인정보가 들어갈 수 있다.
+# 명단은 Supabase에 있어야 하고, 배포 파일에 박혀서는 안 된다.
+.data/
+
+# 비밀 값 — Vercel 환경 변수로 따로 등록한다.
+.env
+.env.local
+.env.*.local
+
+# 내 컴퓨터에서만 쓰는 것
+.bkit/
+trash-can/
+.claude/
+node_modules/
+.next/
+
+# 확인용 스크립트와 개발 문서 (배포에 필요 없음)
+scripts/
+합성_수료자명단_샘플.xlsx
+합성_수료자명단_샘플_v2.xlsx
