@@ -6,7 +6,14 @@ const nextConfig: NextConfig = {
   // 한글이 깨지거나 로고·직인이 사라진다.
   // Design Ref: DESIGN.md 3-4
   outputFileTracingIncludes: {
-    "/api/certificate/pdf": ["./public/fonts/**", "./public/logo/**", "./private/**"],
+    "/api/certificate/pdf": [
+      "./public/fonts/**",
+      "./public/logo/**",
+      "./private/**",
+      // 배포용 크롬 실행 파일. 코드가 실행 중에 불러오기 때문에
+      // 여기에 적지 않으면 Next 가 배포 파일에서 빼버린다.
+      "./node_modules/@sparticuz/chromium/bin/**",
+    ],
     "/api/certificate/preview": ["./public/fonts/**", "./public/logo/**"],
   },
 

@@ -21,7 +21,10 @@ export async function GET(요청: Request) {
   try {
     const html = await 수료증_HTML(찾음.줄, 언어, '실제');
     pdf = await HTML을_PDF로(html);
-  } catch {
+  } catch (오류) {
+    // 화면에는 일반 문구만 보여주고, 원인은 서버 기록에만 남긴다.
+    // 개인정보나 비밀 값은 넣지 않는다.
+    console.error("[수료증 PDF 실패]", 오류 instanceof Error ? 오류.message : String(오류));
     return Response.json(
       { 메시지: '수료증을 만들지 못했습니다. 잠시 뒤 다시 시도해 주세요. 계속되면 사업단으로 문의해 주세요.' },
       { status: 500 },
