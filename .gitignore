@@ -57,3 +57,6 @@ private/*
 
 # bkit 플러그인 작업 기록 (내 컴퓨터에서만 쓰는 것)
 .bkit/
+
+.vercel
+.env*

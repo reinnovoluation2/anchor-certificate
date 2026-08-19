@@ -89,8 +89,14 @@ export async function POST(요청: Request) {
   try {
     저장 = await 저장소().넣기(결과.줄들);
   } catch {
+    // 담당자가 보는 화면이므로 무엇이 막혔는지 알려준다.
+    // 학생 화면과 달리 여기서는 원인을 밝혀도 된다. (DESIGN.md 4-1)
     return Response.json(
-      { 메시지: '지금은 서비스를 이용할 수 없습니다. 잠시 뒤 다시 시도해 주세요.' },
+      {
+        메시지:
+          '명단을 저장하지 못했습니다. 데이터 저장소(Supabase)에 연결되지 않았습니다. ' +
+          '서버 설정에 SUPABASE_URL 과 SUPABASE_SERVICE_ROLE_KEY 가 있는지 사업단 서버 담당자에게 확인해 주세요.',
+      },
       { status: 503 },
     );
   }

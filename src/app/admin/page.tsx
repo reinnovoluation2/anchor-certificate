@@ -48,7 +48,8 @@ export default async function AdminPage() {
         <section className="mt-8 rounded border border-[#e5e5e5] px-5 py-4 text-sm">
           {저장소_문제 ? (
             <p className="text-[#862633]">
-              지금은 명단을 불러올 수 없습니다. 잠시 뒤 다시 시도해 주세요.
+              명단을 불러오지 못했습니다. 데이터 저장소(Supabase)에 연결되지 않았습니다.
+              사업단 서버 담당자에게 확인해 주세요.
             </p>
           ) : 건수 === 0 ? (
             <p className="text-[#555]">
