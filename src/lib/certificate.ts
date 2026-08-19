@@ -164,7 +164,7 @@ h1 {
   display: inline-block;
   width: 18mm;
   height: 18mm;
-  margin-left: -7mm;
+  margin-left: -5mm;
   vertical-align: middle;
   position: relative;
   top: 1mm;
