@@ -23,11 +23,16 @@ async function 글꼴을_문자로(파일명: string): Promise<string> {
 export async function 수료증_글꼴_CSS(): Promise<string> {
   if (기억해둔_CSS) return 기억해둔_CSS;
 
-  const [본문, 굵게, 라틴, 라틴굵게] = await Promise.all([
+  const [본문, 굵게, 라틴, 라틴굵게, 문장부호, 문장부호굵게] = await Promise.all([
     글꼴을_문자로('serif-kr.woff2'),
     글꼴을_문자로('serif-kr-bold.woff2'),
     글꼴을_문자로('serif-latin.woff2'),
     글꼴을_문자로('serif-latin-bold.woff2'),
+    // 「 」 같은 한중일 문장부호. 위의 한글 조각에는 들어 있지 않다.
+    // 내 컴퓨터에서는 크롬이 시스템 글꼴로 대신 그려주지만,
+    // 서버(Vercel)에는 시스템 글꼴이 없어 네모(□)로 나온다.
+    글꼴을_문자로('serif-punct.woff2'),
+    글꼴을_문자로('serif-punct-bold.woff2'),
   ]);
 
   const face = (base64: string, weight: number) => `
